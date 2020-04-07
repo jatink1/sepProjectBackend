@@ -151,6 +151,23 @@ app.post('/getUser', (req, res) => {
     });
 });
 
+//route for viewing all subjectlist
+app.post('/viewSubjects',(req,res)=>{
+  var userId = req.body.userId;
+
+  query = 'SELECT * FROM subjectlist WHERE userId = ("'+userId+'")';
+
+  con.query(query,(err,results)=>{
+    if(err) res.send(err);
+    else{
+      console.log("Subjects");
+      res.send("Subjects");
+    };
+  });
+});
+
+//route for viewing Units of a particular subject
+
 port = 6969;
 app.listen(port,()=>{
     console.log("Listening on 6969");
