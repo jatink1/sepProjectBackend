@@ -14,7 +14,7 @@ app.use(cors());
 
 //creating server connection
 const con = mysql.createConnection({
-    host: localhost,
+    host: "localhost",
     user:"root",
     password:"",
     database:"sepproject"
@@ -22,11 +22,11 @@ const con = mysql.createConnection({
 
 
 //route for adding a new user
-app.post('/createUser',(req,res)=>{
+app.post('/signUp',(req,res)=>{
     var name = req.body.name;
     var email = req.body.email;
     var password = req.body.password;
-    var regno = req.body.regno;
+  //  var regno = req.body.regno;
 
     query = 'INSERT INTO userinfo (name,email,password,regno) VALUES ("' + name+ '", "'+email+'", "'+password+'","'+regno+'")';
 
@@ -137,16 +137,16 @@ app.post('/addTime',(req,res)=>{
 });
 
 //route for viewing current user details
-app.post('/getUser', (req, res) => {
+app.post('/getUserDetails', (req, res) => {
     var userId = req.body.userId;
 
-    query = 'SELECT * FROM userinfo WHERE userId = ("' + userId + '") ';
+    query = 'SELECT * FROM userinfo WHERE id = ("' + userId + '") ';
 
     con.query(query, (err, results) => {
         if (err) res.send("User doesn't exist");
         else {
             console.log("User details");
-            res.send("User details");
+            res.send(results);
         };
     });
 });
@@ -154,19 +154,28 @@ app.post('/getUser', (req, res) => {
 //route for viewing all subjectlist
 app.post('/viewSubjects',(req,res)=>{
   var userId = req.body.userId;
-
   query = 'SELECT * FROM subjectlist WHERE userId = ("'+userId+'")';
-
   con.query(query,(err,results)=>{
     if(err) res.send(err);
     else{
       console.log("Subjects");
-      res.send("Subjects");
+      res.send(results);
     };
   });
 });
 
 //route for viewing Units of a particular subject
+app.post('/viewUnit',(req,res)=>{
+  var subjectName = req.body.unit;
+  query = 'SELECT * FROM unitlist WHERE subjectName = ("'+subjectName+'")';
+  con.query(query,(err,results)=>{
+    if(err) res.send(err);
+    else{
+      console.log("Units");
+      res.send(results);
+    };
+  });
+});
 
 port = 6969;
 app.listen(port,()=>{
